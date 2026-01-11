@@ -13,6 +13,7 @@ class SnippetSerializer(serializers.ModelSerializer):
             "linenos",
             "language",
             "style",
+            "owner", # Owner of the snippet
         )
 
 class UserSerializer(serializers.ModelSerializer):

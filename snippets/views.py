@@ -2,7 +2,8 @@
 from django.contrib.auth.models import User # For user model
 from rest_framework import generics, permissions # For generic views and permissions
 
-from .models import Snippet
+from .models import Snippet # Import Snippet model
+from .permissions import IsOwnerOrReadOnly # Import custom permission
 from .serializers import SnippetSerializer, UserSerializer # Import UserSerializer
 
 # Create your views here.
@@ -17,7 +18,10 @@ class SnippetList(generics.ListCreateAPIView): # View for listing and creating s
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView): # View for snippet detail
     queryset = Snippet.objects.all() # Queryset for all snippets
     serializer_class = SnippetSerializer # Serializer for Snippet model
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,) # Set permissions
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, # Set permissions
+        IsOwnerOrReadOnly, # Custom permission
+                          ) # End of permission_classes
 
 class UserList(generics.ListAPIView): # View for listing users
     queryset = User.objects.all() # Queryset for all users

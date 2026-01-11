@@ -10,6 +10,9 @@ class SnippetList(generics.ListCreateAPIView): # View for listing and creating s
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
 
+    def perform_create(self, serializer): # Assign owner on creation
+        serializer.save(owner=self.request.user)
+
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView): # View for snippet detail
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer

@@ -1,6 +1,6 @@
 # snippets/views.py
 from django.contrib.auth.models import User # For user model
-from rest_framework import generics, permissions # For generic views and permissions
+from rest_framework import generics, permissions, renderers # Import generics, permissions, and renderers from DRF
 from rest_framework.decorators import api_view # For API view decorator
 from rest_framework.response import Response # For API responses
 from rest_framework.reverse import reverse # For reversing URLs
@@ -10,6 +10,14 @@ from .permissions import IsOwnerOrReadOnly # Import custom permission
 from .serializers import SnippetSerializer, UserSerializer # Import UserSerializer
 
 # Create your views here.
+class SnippetHighlight(generics.GenericAPIView): # View for highlighting snippets
+    queryset = Snippet.objects.all() # Queryset for all snippets
+    renderer_classes = (renderers.StaticHTMLRenderer,) # Use static HTML renderer
+
+    def get(self, request, *args, **kwargs): # GET method
+        snippet = self.get_object() # Get the snippet object
+        return Response(snippet.highlighted) # Return the highlighted snippet
+
 @api_view(['GET']) # API view for root endpoint
 def api_root(request, format=None): # Function for API root
     return Response({ # Return a response with links to users and snippets
